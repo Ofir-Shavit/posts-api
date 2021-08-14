@@ -12,7 +12,14 @@ const getPosts = async (start: number, postsNumber: number) => {
     return post;
 };
 
+const getPostsNumber = async () => {
+
+    const postsNumber = await applicationDAL.getPostsNumber();
+    return postsNumber;
+};
+
 export default {
     post,
-    getPosts
+    getPosts,
+    getPostsNumber
 };

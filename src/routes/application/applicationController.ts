@@ -39,8 +39,13 @@ const getPosts = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
-const getPostNumber = async (req: Request, res: Response) => {
-
+const getPostNumber = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const response = await applicationService.getPostsNumber();
+        res.json({postsNumber: response});
+    } catch (error) {
+        next(error);
+    }
 };
 
 export default {

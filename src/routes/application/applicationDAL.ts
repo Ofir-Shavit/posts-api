@@ -42,6 +42,19 @@ const getPosts = async (start: number, postsNumber: number) => {
     }
 };
 
+const getPostsNumber = async () => {
+    try {
+        const response = await esClient.search({
+            index: config.appIndex,
+        });
+        const postsNumber = response.body.hits.total.value;
+        return postsNumber;
+    } catch (error) {
+    }
+};
+
 export default {
-    post, getPosts
+    post,
+    getPosts,
+    getPostsNumber
 };
