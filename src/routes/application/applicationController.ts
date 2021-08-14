@@ -17,8 +17,26 @@ const post = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
-const getPosts = async (req: Request, res: Response) => {
+const getPosts = async (req: Request, res: Response, next: NextFunction) => {
 
+    const {start, postsNumber} = req.query;
+    const startParsed = Number(start);
+    const postsNumberParsed = Number(postsNumber);
+
+    if (!start || !postsNumber) {
+        const error = new Error('Please include the following params in the body of the request: start, postsNumber.');
+        return next(error);
+    } else if (Number.isNaN(startParsed) || Number.isNaN(postsNumberParsed)) {
+        const error = new Error('Please provide only numbers.');
+        return next(error);
+    }
+
+    try {
+        const response = await applicationService.getPosts(startParsed, postsNumberParsed);
+        res.json(response);
+    } catch (error) {
+        next(error);
+    }
 };
 
 const getPostNumber = async (req: Request, res: Response) => {

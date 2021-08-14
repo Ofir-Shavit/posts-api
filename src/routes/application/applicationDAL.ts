@@ -1,5 +1,6 @@
 import config from '../../config';
 import {esClient} from '../../loaders/database';
+import {SearchInnerHits} from '@elastic/elasticsearch/api/types';
 
 interface Post {
     creator: string;
@@ -28,4 +29,19 @@ const post = async (post: Post) => {
 
 };
 
-export default {post};
+const getPosts = async (start: number, postsNumber: number) => {
+    try {
+        const response = await esClient.search({
+            index: config.appIndex,
+            from: start,
+            size: postsNumber,
+        });
+        const posts = response.body.hits.hits.map((doc: SearchInnerHits) => doc._source);
+        return posts;
+    } catch (error) {
+    }
+};
+
+export default {
+    post, getPosts
+};
